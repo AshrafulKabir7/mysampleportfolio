@@ -1,0 +1,9 @@
+@import "tailwindcss";
+@import "./fonts.css";
+@import "./theme.css";
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+}
