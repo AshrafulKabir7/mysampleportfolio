@@ -1,0 +1,41 @@
+/*
+ * Path timeline rail.
+ *
+ * Where CSS scroll-driven animations are supported, the accent fill is drawn
+ * by the compositor, so the rail costs no JavaScript per scroll frame. The tip
+ * tracks the 60% line of the viewport, the same line each node lights at: the
+ * rail container is the view timeline's subject, its scrollport is inset 40%
+ * from the bottom, and the fill runs across `entry-crossing` (0% when the
+ * rail's top reaches the 60% line, 100% when its bottom does).
+ *
+ * Elsewhere, and under reduced motion or in print, the fill is static and fully
+ * drawn; Path.tsx swaps in a motion-driven fill after mount in browsers
+ * without support.
+ */
+@supports (animation-timeline: view()) {
+  @media screen and (prefers-reduced-motion: no-preference) {
+    .path-rail {
+      view-timeline: --path-rail block;
+      view-timeline-inset: 0% 40%;
+    }
+    .path-rail-fill {
+      animation: path-rail-draw linear both;
+      animation-timeline: --path-rail;
+      animation-range: entry-crossing 0% entry-crossing 100%;
+    }
+    /* Scroll-linked, not autoplaying: the site's "pause motion" switch pauses
+       every CSS animation, which would freeze the rail half drawn. */
+    html.motion-paused .path-rail-fill {
+      animation-play-state: running !important;
+    }
+  }
+}
+
+@keyframes path-rail-draw {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}

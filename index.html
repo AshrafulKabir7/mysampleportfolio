@@ -1,12 +1,107 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Nexus.dev | Portfolio</title>
-    <link rel="stylesheet" href="/src/styles/fonts.css" />
-    <link rel="stylesheet" href="/src/styles/theme.css" />
-    <link rel="stylesheet" href="/src/styles/globals.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Ashraful Kabir Alif — AI researcher & ML engineer</title>
+    <meta
+      name="description"
+      content="Ashraful Kabir Alif builds machine learning that holds up when the signal is faint and the stakes are high — exoplanet detection, medical imaging, safe offline RL, genomics, and in-browser AI tools. Dhaka, Bangladesh."
+    />
+    <meta name="author" content="Ashraful Kabir Alif" />
+    <meta name="theme-color" content="#0e0d0c" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="alternate" type="text/plain" href="/llms.txt" title="LLM-readable summary" />
+
+    <meta property="og:type" content="profile" />
+    <meta property="og:title" content="Ashraful Kabir Alif — AI researcher & ML engineer" />
+    <meta
+      property="og:description"
+      content="Machine learning that holds up when the signal is faint and the stakes are high. Research, papers and builds."
+    />
+    <meta property="og:image" content="/og.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Ashraful Kabir Alif — AI researcher & ML engineer" />
+    <meta name="twitter:image" content="/og.jpg" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Ashraful Kabir Alif",
+        "alternateName": ["Md. Ashraful Kabir Alif", "আশরাফুল কবির আলিফ"],
+        "jobTitle": "AI researcher & ML engineer",
+        "address": { "@type": "PostalAddress", "addressLocality": "Dhaka", "addressCountry": "BD" },
+        "affiliation": { "@type": "CollegeOrUniversity", "name": "BRAC University" },
+        "worksFor": { "@type": "Organization", "name": "Shahriar Labs" },
+        "knowsAbout": [
+          "Machine learning",
+          "Computer vision",
+          "Medical imaging",
+          "Offline reinforcement learning",
+          "Exoplanet detection",
+          "Variant effect prediction",
+          "Explainable AI"
+        ],
+        "sameAs": [
+          "https://github.com/AshrafulKabir7",
+          "https://www.linkedin.com/in/ashrafulkabiralif",
+          "https://orcid.org/0009-0001-1011-1236"
+        ]
+      }
+    </script>
+
+    <!-- Theme, motion pause and the one-time intro flag, before first paint (no flash) -->
+    <script>
+      (function () {
+        var d = document.documentElement;
+        var q = location.search;
+        var paused = false;
+        try {
+          if (q.indexOf("theme=light") > -1 || (q.indexOf("theme=dark") < 0 && localStorage.getItem("aka-theme") === "light")) {
+            d.classList.remove("dark");
+            d.classList.add("light");
+            var m = document.querySelector('meta[name="theme-color"]');
+            if (m) m.setAttribute("content", "#f3f1ec");
+          }
+          paused = localStorage.getItem("aka-motion") === "paused";
+          if (paused) d.classList.add("motion-paused");
+        } catch (e) {}
+        // If the app bundle never runs, reveal content left in its entrance state (main.tsx clears this)
+        window.__akaReveal = setTimeout(function () {
+          d.classList.add("reveal-all");
+          d.classList.remove("intro-pending");
+        }, 3500);
+        try {
+          var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+          if (!reduce && !paused && q.indexOf("nointro") < 0 && !sessionStorage.getItem("aka-intro")) {
+            d.classList.add("intro-pending");
+            var skip = function () {
+              d.classList.remove("intro-pending");
+            };
+            // skippable before hydration too; Intro.tsx takes over these once it mounts
+            window.__akaIntroSkip = skip;
+            window.addEventListener("keydown", function (e) {
+              if (e.key === "Escape" && !window.__akaIntroMounted) skip();
+            });
+            window.addEventListener("pointerdown", function () {
+              if (!window.__akaIntroMounted) skip();
+            });
+            // failsafe: never trap the page behind the intro; Intro.tsx clears and re-arms it
+            window.__akaIntroT = setTimeout(skip, 4000);
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <noscript>
+      <style>
+        #root [style*="opacity:0"] { opacity: 1 !important; }
+        #root [style*="translateY("], #root [style*="translateX("], #root [style*="scale("] { transform: none !important; }
+        #root [style*="clip-path"] { clip-path: none !important; }
+      </style>
+    </noscript>
   </head>
   <body>
     <div id="root"></div>

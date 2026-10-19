@@ -1,0 +1,25 @@
+/* Featured-card screenshot parallax as a CSS scroll-driven animation.
+   Progressive enhancement: runs off the main thread where `animation-timeline`
+   is supported, and is simply static elsewhere and under reduced motion —
+   so no JS scroll tracker measures the cards on every frame. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .build-card {
+      view-timeline-name: --build-card;
+    }
+    .build-parallax {
+      animation: build-parallax linear both;
+      animation-timeline: --build-card;
+      animation-range: cover;
+    }
+  }
+}
+
+@keyframes build-parallax {
+  from {
+    transform: translate3d(0, 4%, 0);
+  }
+  to {
+    transform: translate3d(0, -4%, 0);
+  }
+}

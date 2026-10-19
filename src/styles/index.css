@@ -1,3 +1,445 @@
-@import './fonts.css';
-@import './tailwind.css';
-@import './theme.css';
+/* Fonts — self-hosted via Fontsource (no render-blocking @import) */
+@import "@fontsource-variable/bricolage-grotesque/opsz.css";
+@import "@fontsource-variable/geist/index.css";
+@import "@fontsource-variable/geist-mono/index.css";
+@import "@fontsource/instrument-serif/latin-400-italic.css";
+@import "@fontsource/instrument-serif/latin-400.css";
+
+@import "tailwindcss" source(none);
+@source "../**/*.{ts,tsx}";
+
+/* Anek Bangla, subset to the Bengali glyphs the site uses (≈6 KB instead of 199 KB).
+   No latin face on purpose: spaces fall through to the next family.
+   Coverage is asserted at build time (scripts/prerender.mjs + src/assets/fonts/anek-bangla-sub.chars.txt). */
+@font-face {
+  font-family: "Anek Bangla Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 800;
+  src: url("../assets/fonts/anek-bangla-sub.woff2") format("woff2-variations"), url("../assets/fonts/anek-bangla-sub.woff2") format("woff2");
+  unicode-range: U+0980-09FF, U+200C-200D, U+25CC;
+}
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ───────────── Design tokens ─────────────
+   Dark "observatory" is the default; light "lab paper" via html.light.
+   Accent = Bangladesh-flag red, used for interaction only (<5% of pixels).
+   Live = flag green, used only for "online/now" dots. */
+:root {
+  --bg: #0e0d0c;
+  --surface: #161513;
+  --surface-2: #1d1c19;
+  --fg: #edeae4;
+  --muted: #9b968e;
+  --subtle: #6e6a63;
+  --line: rgb(237 234 228 / 0.1);
+  --line-strong: rgb(237 234 228 / 0.2);
+  --accent: #f42a41;
+  --accent-soft: rgb(244 42 65 / 0.14);
+  --accent-text: #ff5a6b; /* accent as small text: AA on bg and on accent-soft */
+  --accent-strong: #d21f36; /* accent as a fill under text */
+  --on-accent: #fff6f6;
+  --live: #2bd38a;
+  --live-ring: rgb(43 211 138 / 0.55);
+  --grain-opacity: 0.07;
+  --shadow-card: 0 1px 0 rgb(255 255 255 / 0.04) inset, 0 30px 80px -40px rgb(0 0 0 / 0.8);
+  color-scheme: dark;
+}
+
+:root.light {
+  --bg: #f3f1ec;
+  --surface: #ebe8e1;
+  --surface-2: #e2ded5;
+  --fg: #141312;
+  --muted: #5c5852;
+  --subtle: #8a857c;
+  --line: rgb(20 19 18 / 0.11);
+  --line-strong: rgb(20 19 18 / 0.22);
+  --accent: #d21f36;
+  --accent-soft: rgb(210 31 54 / 0.1);
+  --accent-text: #b81a2f;
+  --accent-strong: #d21f36;
+  --on-accent: #fff6f6;
+  --live: #00704f;
+  --live-ring: rgb(0 112 79 / 0.45);
+  --grain-opacity: 0.045;
+  --shadow-card: 0 1px 0 rgb(255 255 255 / 0.6) inset, 0 30px 60px -40px rgb(40 30 20 / 0.35);
+  color-scheme: light;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-subtle: var(--subtle);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-text: var(--accent-text);
+  --color-accent-strong: var(--accent-strong);
+  --color-on-accent: var(--on-accent);
+  --color-live: var(--live);
+
+  --font-display: "Bricolage Grotesque Variable", "Geist Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Geist Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "Geist Mono Variable", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --font-serif: "Instrument Serif", "Iowan Old Style", Georgia, serif;
+  --font-bangla: "Anek Bangla Variable", "Noto Sans Bengali", sans-serif;
+
+  --radius-card: 20px;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+
+  --animate-marquee: marquee var(--marquee-duration, 48s) linear infinite;
+  --animate-ping-dot: ping-dot 2.4s ease-out infinite;
+
+  @keyframes marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+  /* transform + opacity only (compositor); plain vars because Tailwind's color-mix fallback nests @supports */
+  @keyframes ping-dot {
+    from {
+      transform: scale(1);
+      opacity: 0.55;
+    }
+    to {
+      transform: scale(2.6);
+      opacity: 0;
+    }
+  }
+}
+
+/* ───────────── Base ───────────── */
+@layer base {
+  *,
+  ::before,
+  ::after {
+    border-color: var(--line);
+  }
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-padding-top: 96px;
+  }
+  html:not(.lenis) {
+    scroll-behavior: smooth;
+  }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    overflow-x: clip;
+    transition: background-color 0.4s var(--ease-out-expo), color 0.4s var(--ease-out-expo);
+  }
+  ::selection {
+    background: var(--accent-strong);
+    color: var(--on-accent);
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+  button {
+    cursor: pointer;
+    font: inherit;
+    color: inherit;
+  }
+  img {
+    max-width: 100%;
+    display: block;
+  }
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+}
+
+/* ───────────── Utilities ───────────── */
+@utility container-page {
+  width: 100%;
+  max-width: 1360px;
+  margin-inline: auto;
+  padding-inline: clamp(16px, 4vw, 48px);
+}
+
+@utility section-pad {
+  padding-block: clamp(64px, 8.5vw, 128px);
+}
+
+/* Mono metadata label: §01 — RESEARCH */
+@utility label-mono {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  line-height: 1.2;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+/* Serif italic emphasis inside display headings */
+@utility em-serif {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+@utility text-display-xl {
+  font-family: var(--font-display);
+  font-size: clamp(3.3rem, 12.4vw, 13.5rem);
+  line-height: 0.86;
+  letter-spacing: -0.045em;
+  font-weight: 600;
+}
+
+@utility text-display-lg {
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 6.2vw, 5.4rem);
+  line-height: 0.95;
+  letter-spacing: -0.035em;
+  font-weight: 600;
+}
+
+@utility text-display-md {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 2.6vw, 2.25rem);
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  font-weight: 600;
+}
+
+@utility text-lede {
+  font-size: clamp(1.15rem, 1.6vw, 1.4rem);
+  line-height: 1.45;
+  letter-spacing: -0.01em;
+}
+
+@utility hairline {
+  border-color: var(--line);
+}
+
+/* Glass — nav, palette and overlays only, never on long text */
+@utility glass {
+  background: color-mix(in srgb, var(--bg) 72%, transparent);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  backdrop-filter: blur(14px) saturate(140%);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.06), 0 12px 40px -20px rgb(0 0 0 / 0.6);
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .glass {
+    background: var(--surface);
+  }
+}
+
+/* Card surface with pointer spotlight: set --mx/--my on the element */
+@utility spotlight {
+  position: relative;
+  isolation: isolate;
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.4s var(--ease-out-expo);
+    background: radial-gradient(
+      420px circle at var(--mx, 50%) var(--my, 50%),
+      color-mix(in srgb, var(--fg) 7%, transparent),
+      transparent 60%
+    );
+  }
+  &:hover::before,
+  &:focus-within::before {
+    opacity: 1;
+  }
+}
+
+/* Underline that draws from the left in accent */
+@utility link-draw {
+  background-image: linear-gradient(var(--accent), var(--accent));
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 0.5s var(--ease-out-expo), color 0.3s;
+  &:hover,
+  &:focus-visible {
+    background-size: 100% 1px;
+  }
+}
+
+@utility tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* ───────────── Global grain (static tile, never animated) ───────────── */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  pointer-events: none;
+  opacity: var(--grain-opacity);
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.5  0 0 0 0 0.5  0 0 0 0 0.5  0 0 0 1.4 -0.2'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  background-size: 160px 160px;
+}
+
+/* Lenis */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: clip;
+}
+
+/* View-transition theme reveal: let JS drive the clip-path */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+/* Intro overlay is server-rendered; only shown when the inline script flags it */
+html:not(.intro-pending) [data-intro] {
+  display: none;
+}
+html.intro-pending:not(.intro-lifting) {
+  overflow: hidden;
+}
+
+/* Hero entrance lives in CSS so the prerendered hero animates (and is readable)
+   before JavaScript arrives. Paused under the intro curtain, released when it lifts. */
+@keyframes hero-in {
+  from {
+    opacity: 0;
+    translate: 0 var(--hy, 18px);
+  }
+}
+@keyframes hero-rise {
+  from {
+    translate: 0 var(--hy, 14px);
+  }
+}
+@keyframes hero-line {
+  from {
+    translate: 0 110%;
+  }
+}
+.hero-in {
+  animation: hero-in 1s var(--ease-out-expo) var(--hd, 0s) both;
+}
+/* translate-only for LCP candidates: they paint at first contentful paint */
+.hero-rise {
+  animation: hero-rise 1s var(--ease-out-expo) var(--hd, 0s) both;
+}
+.hero-line {
+  animation: hero-line 1.15s var(--ease-out-expo) var(--hd, 0s) both;
+}
+html.intro-pending:not(.intro-lifting) :is(.hero-in, .hero-rise, .hero-line) {
+  animation-play-state: paused;
+}
+
+/* Scroll cue: compositor-only loop */
+@keyframes cue {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(200%);
+  }
+}
+.cue {
+  animation: cue 2.3s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+/* Live dot ring */
+.live-dot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--live-ring);
+  animation: var(--animate-ping-dot);
+}
+
+/* "Pause motion" toggle (footer) — WCAG 2.2.2. JS loops read html.motion-paused too.
+   Only looping animations are paused: pausing a one-shot entrance with fill "both"
+   would freeze it on its hidden first frame, so entrances are skipped instead. */
+html.motion-paused :is(.cue, .animate-marquee),
+html.motion-paused .live-dot::after {
+  animation-play-state: paused !important;
+}
+html.motion-paused :is(.hero-in, .hero-rise, .hero-line) {
+  animation: none !important;
+}
+
+/* If JavaScript never arrives, reveal everything the prerender left in an entrance state */
+html.reveal-all #root [style*="opacity:0"] {
+  opacity: 1 !important;
+}
+html.reveal-all #root [style*="translateY("],
+html.reveal-all #root [style*="translateX("],
+html.reveal-all #root [style*="scale("] {
+  transform: none !important;
+}
+html.reveal-all #root [style*="clip-path"] {
+  clip-path: none !important;
+}
+html.reveal-all [data-intro] {
+  display: none !important;
+}
+
+/* Reduced-motion safety net */
+@media (prefers-reduced-motion: reduce) {
+  .hero-in,
+  .hero-rise,
+  .hero-line,
+  .cue,
+  .live-dot::after {
+    animation: none !important;
+  }
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

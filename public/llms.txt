@@ -1,0 +1,27 @@
+# Ashraful Kabir Alif
+
+> AI researcher and ML engineer in Dhaka, Bangladesh (BRAC University; AI Developer at Shahriar Labs). Builds machine learning that holds up when the signal is faint and the stakes are high: exoplanet detection in JWST imaging, kidney tumour/stone segmentation, safe offline RL for sepsis treatment, variant effect prediction, ADMET prediction, and in-browser computer vision tools.
+
+## Research
+- Exoplanet direct imaging (JWST/MIRI): contrastive, few-shot Siamese ResNet18 — 92.16% accuracy. BSc thesis; paper submitted.
+- MoE-RenalSAM: SAM2 + LoRA mixture-of-experts for renal tumour (Dice 88.19%) and stone (Dice 84.06%) segmentation: https://github.com/AshrafulKabir7/MoE-RenalSAM
+- Action-masked conservative Q-learning for sepsis (ICU-Sepsis benchmark): https://github.com/AshrafulKabir7/sepsis-offline-rl
+- VariantFusion (MSc thesis, in progress): calibrated, isoform-aware variant effect prediction.
+- Multi-task GATv2 for 23 ADMET endpoints: https://github.com/AshrafulKabir7/ADMET_Research
+
+## Publications
+- Pattern Recognition in Disaster Response: Leveraging Machine Learning for Twitter Analysis. ICITA 2024, LNNS (Springer), 2025. https://doi.org/10.1007/978-981-96-1758-6_4
+- Submitted (2025): exoplanet detection with contrastive learning on JWST data; monotonic neuro-symbolic semantic loss; explainable chromatin accessibility prediction.
+- In preparation: fair and explainable multi-disease chest X-ray diagnosis.
+
+## Builds
+- Defecto — in-browser anomaly detection for visual inspection: https://defecto-five.vercel.app
+- Tallycam — in-browser detection, tracking and counting: https://tallycam.vercel.app
+- Citely — grounded document Q&A with citations: https://citely-pi.vercel.app
+- CaseCraft — legal drafting with hybrid RAG: https://github.com/AshrafulKabir7/PSL-Flow
+
+## Contact
+- Email: md.ashraful.kabir.alif@g.bracu.ac.bd
+- GitHub: https://github.com/AshrafulKabir7
+- LinkedIn: https://www.linkedin.com/in/ashrafulkabiralif
+- ORCID: https://orcid.org/0009-0001-1011-1236

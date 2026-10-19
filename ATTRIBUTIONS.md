@@ -1,3 +1,5 @@
-This Figma Make file includes components from [shadcn/ui](https://ui.shadcn.com/) used under [MIT license](https://github.com/shadcn-ui/ui/blob/main/LICENSE.md).
+Fonts, all under the SIL Open Font License 1.1 and self-hosted through Fontsource: Bricolage Grotesque, Geist, Geist Mono, Instrument Serif and Anek Bangla.
 
-This Figma Make file includes photos from [Unsplash](https://unsplash.com) used under [license](https://unsplash.com/license).
+Icons come from [Lucide](https://lucide.dev) (ISC License).
+
+The project screenshots are of Ashraful Kabir Alif's own deployed apps.

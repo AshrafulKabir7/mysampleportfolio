@@ -1,0 +1,28 @@
+/* Hero-only CSS that Tailwind can't express. The entrance itself lives in
+   index.css (.hero-in / .hero-rise / .hero-line); these extend it. */
+
+/* "stakes are high" halftone underline prints in after the thesis rises */
+@keyframes hero-ink {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+}
+.hero-ink {
+  animation: hero-ink 1.1s var(--ease-out-expo) var(--hd, 0s) both;
+}
+html.intro-pending:not(.intro-lifting) .hero-ink {
+  animation-play-state: paused;
+}
+
+/* The site-level "Pause motion" switch pauses every CSS animation. A paused
+   entrance would freeze on its first keyframe (hidden), so drop it instead:
+   paused motion = the final, fully visible state. */
+html.motion-paused :is(.hero-in, .hero-rise, .hero-line, .hero-ink) {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-ink {
+    animation: none !important;
+  }
+}

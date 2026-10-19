@@ -1,0 +1,119 @@
+/* Intro curtain — the coronagraph mark resolving out of noise.
+   Pure CSS keyframes on prerendered markup: it plays from first paint, before
+   JavaScript; Intro.tsx only decides when the curtain lifts. Every element's
+   base style is its FINAL state and the keyframes only define `from`, so
+   `animation: none` (paused motion) shows the resolved mark at once. */
+
+[data-intro] .i-dot {
+  transform-box: fill-box;
+  transform-origin: center;
+  opacity: var(--o1);
+  animation: i-dot 0.5s var(--ease-out-expo) var(--d) both;
+}
+@keyframes i-dot {
+  from {
+    opacity: var(--o0);
+    transform: scale(var(--k0));
+  }
+}
+
+/* noise: start opacity */
+.z0 { --o0: 0.1; }
+.z1 { --o0: 0.24; }
+.z2 { --o0: 0.4; }
+.z3 { --o0: 0.58; }
+/* noise: start size relative to the resolved dot */
+.k0 { --k0: 0.3; }
+.k1 { --k0: 0.5; }
+.k2 { --k0: 0.75; }
+.k3 { --k0: 1; }
+.k4 { --k0: 1.4; }
+.k5 { --k0: 2; }
+/* signal: resolved opacity */
+.q0 { --o1: 0; }
+.q1 { --o1: 0.16; }
+.q2 { --o1: 0.32; }
+.q3 { --o1: 0.52; }
+.q4 { --o1: 0.76; }
+.q5 { --o1: 1; }
+/* resolve wave, from the star outward */
+.w0 { --d: 0.06s; }
+.w1 { --d: 0.12s; }
+.w2 { --d: 0.18s; }
+.w3 { --d: 0.24s; }
+.w4 { --d: 0.3s; }
+.w5 { --d: 0.36s; }
+.w6 { --d: 0.42s; }
+
+[data-intro] .i-ring {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: rotate(-90deg);
+  animation: i-ring 0.62s var(--ease-in-out-quart) 0.16s both;
+}
+@keyframes i-ring {
+  from {
+    stroke-dashoffset: 1;
+  }
+}
+
+[data-intro] .i-core {
+  animation: i-fade 0.3s ease-out 0.34s both;
+}
+[data-intro] .i-orbit {
+  animation: i-fade 0.7s ease-out 0.42s both;
+}
+@keyframes i-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+[data-intro] .i-comp {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: i-pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) 0.56s both;
+}
+@keyframes i-pop {
+  from {
+    opacity: 0;
+    transform: scale(0);
+  }
+}
+
+[data-intro] .i-ret {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: i-lock 0.55s var(--ease-out-expo) 0.62s both;
+}
+@keyframes i-lock {
+  from {
+    opacity: 0;
+    transform: scale(2.4);
+  }
+}
+
+[data-intro] .i-name {
+  animation: i-rise 0.8s var(--ease-out-expo) 0.4s both;
+}
+@keyframes i-rise {
+  from {
+    transform: translateY(108%);
+  }
+}
+
+[data-intro] .i-meta {
+  animation: i-in 0.6s var(--ease-out-expo) 0.64s both;
+}
+@keyframes i-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+html.motion-paused [data-intro] :is(.i-dot, .i-ring, .i-core, .i-orbit, .i-comp, .i-ret, .i-name, .i-meta) {
+  animation: none;
+}
